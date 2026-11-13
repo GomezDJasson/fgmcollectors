@@ -185,7 +185,7 @@ function App() {
               <div className="absolute bottom-[8%] h-8 w-[62%] rounded-[50%] bg-black/50 blur-2xl" />
               <img
                 src={nerdBot}
-                alt="Nerdbot, la mascota de Nerdybles, junto a una figura coleccionable"
+                alt="Mascota de Nerdybles junto a una figura coleccionable"
                 className="relative z-10 w-full max-w-[510px] drop-shadow-[0_25px_55px_rgba(91,33,182,0.3)]"
               />
               <div className="absolute right-1 top-[16%] hidden rounded-2xl border border-white/10 bg-[#211a30]/90 px-4 py-3 shadow-xl backdrop-blur sm:block">
@@ -275,12 +275,9 @@ function App() {
           <p className="text-sm text-white/40">
             Un universo para quienes disfrutan coleccionar.
           </p>
-          <a
-            href="mailto:hola@nerdybles.com"
-            className="text-sm font-semibold text-[#c4b5fd] transition-colors hover:text-white"
-          >
-            Contacto
-          </a>
+          <span className="text-sm font-medium text-white/40">
+            Canales de contacto próximamente
+          </span>
         </div>
         <div className="border-t border-white/[0.06] px-5 py-5 text-center text-xs text-white/30">
           © {new Date().getFullYear()} Nerdybles. Todos los derechos reservados.
