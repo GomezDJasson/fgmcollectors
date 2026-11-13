@@ -9,18 +9,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tailwindcss/vite": "latest",
     "lucide-react": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "react-router-dom": "latest",
-    "tailwindcss": "latest"
+    "react-router-dom": "latest"
   },
   "devDependencies": {
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "@vitejs/plugin-react": "latest",
     "typescript": "latest",
-    "vite": "latest"
+    "vite": "latest",
+    "@tailwindcss/vite": "latest",
+    "tailwindcss": "latest"
   }
 }
