@@ -11,7 +11,9 @@ import nerdBot from "../nerdbot.png";
 
 const navigation = [
   { label: "Inicio", href: "#inicio" },
-  { label: "Colecciones", href: "#colecciones" },
+  { label: "Novedades", href: "#novedades" },
+  { label: "Destacados", href: "#destacados" },
+  { label: "Categorías", href: "#colecciones" },
   { label: "Nuestra esencia", href: "#nosotros" },
   { label: "Contacto", href: "#contacto" },
 ];
@@ -54,9 +56,7 @@ function App() {
               alt=""
               className="h-11 w-11 rounded-xl object-contain"
             />
-            <span className="text-xl font-black tracking-tight">
-              nerdy<span className="text-[#a78bfa]">bles</span>
-            </span>
+            <span className="brand-name text-xl font-bold tracking-tight">Nerdybles</span>
           </a>
 
           <nav className="hidden items-center gap-8 md:flex" aria-label="Navegación principal">
@@ -198,6 +198,46 @@ function App() {
           </div>
         </section>
 
+
+        <section id="novedades" className="scroll-mt-20">
+          <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8">
+            <div className="mb-10 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+              <div>
+                <p className="text-xs font-bold tracking-[0.22em] text-[#f6c945]">RECIÉN LLEGADOS</p>
+                <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Lo más nuevo</h2>
+              </div>
+              <p className="max-w-md text-sm leading-7 text-white/50">Descubre las últimas piezas que se suman al universo Nerdybles.</p>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {[1, 2, 3].map((item) => (
+                <article key={item} className="overflow-hidden rounded-2xl border border-white/10 bg-[#171222]">
+                  <div className="flex aspect-[4/3] items-center justify-center bg-[radial-gradient(ellipse_at_center,rgba(167,139,250,0.2),rgba(23,18,34,0.15)_65%)]">
+                    <Sparkles size={34} className="text-[#a78bfa]/60" />
+                  </div>
+                  <div className="p-5">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-[#a78bfa]">Próximamente</span>
+                    <p className="mt-2 text-sm text-white/55">Aquí encontrarás los productos más recientes.</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="destacados" className="scroll-mt-20 border-y border-white/10 bg-white/[0.025]">
+          <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8">
+            <div className="mb-10">
+              <p className="text-xs font-bold tracking-[0.22em] text-[#a78bfa]">SELECCIÓN NERDYBLES</p>
+              <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Productos destacados</h2>
+            </div>
+            <div className="rounded-3xl border border-dashed border-[#a78bfa]/30 bg-[#171222]/70 px-6 py-12 text-center sm:px-12">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#7c3aed]/15 text-[#c4b5fd]"><Sparkles size={25} /></div>
+              <h3 className="mt-5 text-xl font-bold">Estamos preparando algo especial</h3>
+              <p className="mx-auto mt-2 max-w-lg text-sm leading-7 text-white/50">Muy pronto podrás descubrir aquí los productos seleccionados de Nerdybles.</p>
+            </div>
+          </div>
+        </section>
+
         <section id="colecciones" className="scroll-mt-20 border-y border-white/10 bg-white/[0.025]">
           <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8">
             <div className="mb-10 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
@@ -268,9 +308,7 @@ function App() {
         <div className="mx-auto flex max-w-7xl flex-col gap-8 px-5 py-9 sm:px-8 md:flex-row md:items-center md:justify-between">
           <a href="#inicio" className="flex items-center gap-3">
             <img src={nerdBot} alt="" className="h-10 w-10 object-contain" />
-            <span className="text-lg font-black tracking-tight">
-              nerdy<span className="text-[#a78bfa]">bles</span>
-            </span>
+            <span className="brand-name text-lg font-bold tracking-tight">Nerdybles</span>
           </a>
           <p className="text-sm text-white/40">
             Un universo para quienes disfrutan coleccionar.
