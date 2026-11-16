@@ -27,6 +27,7 @@ interface CartContextValue {
   addItem: (product: Product) => AddItemResult;
   updateQuantity: (productId: string, quantity: number) => void;
   removeItem: (productId: string) => void;
+  clearCart: () => void;
 }
 
 const STORAGE_KEY = "nerdybles-cart-v1";
@@ -126,6 +127,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     );
   };
 
+  const clearCart = () => setStoredItems([]);
+
   const totalQuantity = items.reduce((total, item) => total + item.quantity, 0);
   const subtotal = items.reduce(
     (total, item) =>
@@ -135,7 +138,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   return (
     <CartContext.Provider
-      value={{ items, totalQuantity, subtotal, addItem, updateQuantity, removeItem }}
+      value={{ items, totalQuantity, subtotal, addItem, updateQuantity, removeItem, clearCart }}
     >
       {children}
     </CartContext.Provider>
