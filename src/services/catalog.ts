@@ -3,7 +3,7 @@ import type { CatalogResponse } from "../types/product";
 const CATALOG_API_URL =
   "https://script.google.com/macros/s/AKfycbx7Tpq2ak2Opb2fn_m4q-Mn2u1Hws8voQIKn48P9YoAucXLihUqbZYU-XqiokC8HxVYkg/exec";
 
-export async function getCatalog(): Promise<CatalogResponse> {
+let catalogRequest: Promise<CatalogResponse> | null = null;\n\nexport function getCatalog(): Promise<CatalogResponse> {\n  if (!catalogRequest) {\n    catalogRequest = fetchCatalog().catch((error: unknown) => {\n      catalogRequest = null;\n      throw error;\n    });\n  }\n\n  return catalogRequest;\n}\n\nasync function fetchCatalog(): Promise<CatalogResponse> {
   const response = await fetch(CATALOG_API_URL, {
     method: "GET",
     headers: {
