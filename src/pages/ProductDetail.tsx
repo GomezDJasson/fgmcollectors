@@ -1,6 +1,16 @@
 import { useState } from "react";
-import { ArrowLeft, Check, ChevronLeft, ChevronRight, MessageCircle, Package, Sparkles } from "lucide-react";
+import {
+  ArrowLeft,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  MessageCircle,
+  Package,
+  ShoppingCart,
+  Sparkles,
+} from "lucide-react";
 import { Link, useParams } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 import { useCatalog } from "../context/CatalogContext";
 
 const currencyFormatter = new Intl.NumberFormat("es-CO", {
@@ -12,11 +22,13 @@ const currencyFormatter = new Intl.NumberFormat("es-CO", {
 function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const { catalog, loading, error } = useCatalog();
+  const { addItem } = useCart();
+  const [selectedImage, setSelectedImage] = useState("");
+  const [cartFeedback, setCartFeedback] = useState("");
   const product = catalog?.products.find((item) => item.id === id);
   const images = product
     ? [product.images.main, product.images.additional1, product.images.additional2].filter(Boolean)
     : [];
-  const [selectedImage, setSelectedImage] = useState("");
 
   const activeImage = images.includes(selectedImage) ? selectedImage : images[0];
   const activeImageIndex = images.indexOf(activeImage);
@@ -30,6 +42,19 @@ function ProductDetail() {
   const showNextImage = () => {
     if (images.length > 1) {
       setSelectedImage(images[(activeImageIndex + 1) % images.length]);
+    }
+  };
+
+  const handleAddToCart = () => {
+    if (!product) return;
+
+    const result = addItem(product);
+    if (result === "added") {
+      setCartFeedback("Producto agregado al carrito.");
+    } else if (result === "limit") {
+      setCartFeedback("Ya tienes todas las unidades disponibles en el carrito.");
+    } else {
+      setCartFeedback("Este producto no está disponible actualmente.");
     }
   };
 
@@ -201,6 +226,40 @@ function ProductDetail() {
               )}
             </div>
 
+            {product.availability === "Disponible" && product.stock > 0 && (
+              <div className="mt-7">
+                <button
+                  type="button"
+                  onClick={handleAddToCart}
+                  className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[#f6c945] px-6 py-3 text-sm font-extrabold text-[#211807] transition-all hover:-translate-y-0.5 hover:bg-[#ffda68] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f6c945]"
+                >
+                  <ShoppingCart size={18} />
+                  Agregar al carrito
+                </button>
+                {cartFeedback && (
+                  <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs">
+                    <p aria-live="polite" className="text-white/60">{cartFeedback}</p>
+                    <Link to="/carrito" className="font-bold text-[#c4b5fd] transition-colors hover:text-white">
+                      Ver carrito
+                    </Link>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-bold text-white transition-all hover:border-[#a78bfa]/50 hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f6c945]"
+            >
+              <MessageCircle size={18} />
+              Consultar por WhatsApp
+            </a>
+            <p className="mt-3 text-center text-xs leading-5 text-white/35">
+              Confirma disponibilidad y detalles de entrega directamente con Nerdybles.
+            </p>
+
             <div className="mt-8 border-t border-white/10 pt-7">
               <h2 className="text-lg font-bold">Descripción</h2>
               <p className="mt-3 whitespace-pre-line text-sm leading-7 text-white/60">
@@ -221,19 +280,6 @@ function ProductDetail() {
                 </dl>
               </div>
             )}
-
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-8 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#f6c945] px-6 py-3 text-sm font-extrabold text-[#211807] transition-all hover:-translate-y-0.5 hover:bg-[#ffda68] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f6c945]"
-            >
-              <MessageCircle size={18} />
-              Consultar por WhatsApp
-            </a>
-            <p className="mt-3 text-center text-xs leading-5 text-white/35">
-              Confirma disponibilidad y detalles de entrega directamente con Nerdybles.
-            </p>
           </section>
         </div>
       </div>
