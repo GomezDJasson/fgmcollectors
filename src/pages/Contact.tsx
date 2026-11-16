@@ -1,10 +1,8 @@
 import {
   ArrowUpRight,
-  AtSign,
   Mail,
   MessageCircle,
   PackageCheck,
-  Send,
   Truck,
 } from "lucide-react";
 
