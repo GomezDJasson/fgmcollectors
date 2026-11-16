@@ -4,6 +4,7 @@ import { CartProvider } from "./context/CartContext";
 import { CatalogProvider } from "./context/CatalogContext";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import Contact from "./pages/Contact";
 import Home from "./pages/Home";
 import ProductDetail from "./pages/ProductDetail";
 import Shop from "./pages/Shop";
@@ -17,6 +18,7 @@ function App() {
             <Route element={<SiteLayout />}>
               <Route path="/" element={<Home />} />
               <Route path="/tienda" element={<Shop />} />
+              <Route path="/contacto" element={<Contact />} />
               <Route path="/producto/:id" element={<ProductDetail />} />
               <Route path="/carrito" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
