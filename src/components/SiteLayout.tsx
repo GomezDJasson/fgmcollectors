@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import { Facebook, Instagram, Mail, Menu, MessageCircle, ShoppingCart, X, Youtube } from "lucide-react";
+import { Mail, Menu, MessageCircle, ShoppingCart, X } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import nerdBot from "../../nerdbot.png";
 
@@ -11,12 +11,12 @@ const navigation = [
 ];
 
 const socialLinks = [
-  { label: "Instagram", href: "https://www.instagram.com/nerdybles/", icon: Instagram },
-  { label: "Facebook", href: "https://www.facebook.com/nerdybles", icon: Facebook },
-  { label: "TikTok", href: "https://www.tiktok.com/@juliethmar8", icon: null },
-  { label: "X", href: "https://x.com/nerdybles", icon: null },
-  { label: "YouTube", href: "https://www.youtube.com/@nerdybles", icon: Youtube },
-  { label: "Threads", href: "https://www.threads.net/@nerdybles", icon: null },
+  { label: "Instagram", href: "https://www.instagram.com/nerdybles/", mark: "◎" },
+  { label: "Facebook", href: "https://www.facebook.com/nerdybles", mark: "f" },
+  { label: "TikTok", href: "https://www.tiktok.com/@juliethmar8", mark: "♪" },
+  { label: "X", href: "https://x.com/nerdybles", mark: "𝕏" },
+  { label: "YouTube", href: "https://www.youtube.com/@nerdybles", mark: "▶" },
+  { label: "Threads", href: "https://www.threads.net/@nerdybles", mark: "@" },
 ];
 
 function CartIndicator() {
@@ -134,7 +134,7 @@ function SiteLayout() {
               nerdybles@gmail.com
             </a>
             <div className="flex items-center gap-3" aria-label="Redes sociales de Nerdybles">
-              {socialLinks.map(({ label, href, icon: Icon }) => (
+              {socialLinks.map(({ label, href, mark }) => (
                 <a
                   key={label}
                   href={href}
@@ -144,7 +144,7 @@ function SiteLayout() {
                   title={label}
                   className="flex size-8 items-center justify-center rounded-lg text-white/45 transition-colors hover:bg-white/10 hover:text-[#c4b5fd] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6c945]"
                 >
-                  {Icon ? <Icon size={17} /> : <span className="text-xs font-bold">{label === "Threads" ? "@" : label}</span>}
+                  <span className="text-sm font-bold">{mark}</span>
                 </a>
               ))}
             </div>
