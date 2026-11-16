@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, ShoppingCart, X } from "lucide-react";
+import { useCart } from "../context/CartContext";
 import nerdBot from "../../nerdbot.png";
 
 const navigation = [
@@ -8,6 +9,25 @@ const navigation = [
   { label: "Tienda", to: "/tienda" },
   { label: "Contacto", to: "/#contacto" },
 ];
+
+function CartIndicator() {
+  const { totalQuantity } = useCart();
+
+  return (
+    <Link
+      to="/carrito"
+      aria-label={`Carrito de compras, ${totalQuantity} artículos`}
+      className="relative flex size-10 items-center justify-center rounded-xl text-white/75 transition-colors hover:bg-white/5 hover:text-[#c4b5fd] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6c945]"
+    >
+      <ShoppingCart size={21} />
+      {totalQuantity > 0 && (
+        <span className="absolute -right-1 -top-1 flex min-h-5 min-w-5 items-center justify-center rounded-full bg-[#f6c945] px-1 text-[10px] font-black leading-none text-[#211807]">
+          {totalQuantity > 99 ? "99+" : totalQuantity}
+        </span>
+      )}
+    </Link>
+  );
+}
 
 function SiteLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -27,29 +47,34 @@ function SiteLayout() {
             <span className="brand-name text-xl font-bold tracking-tight">Nerdybles</span>
           </Link>
 
-          <nav className="hidden items-center gap-8 md:flex" aria-label="Navegación principal">
-            {navigation.map((item) => (
-              <Link
-                key={item.label}
-                to={item.to}
-                className="text-sm font-medium text-white/65 transition-colors hover:text-white"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
+          <div className="hidden items-center gap-7 md:flex">
+            <nav className="flex items-center gap-8" aria-label="Navegación principal">
+              {navigation.map((item) => (
+                <Link
+                  key={item.label}
+                  to={item.to}
+                  className="text-sm font-medium text-white/65 transition-colors hover:text-white"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+            <CartIndicator />
+          </div>
 
-
-          <button
-            type="button"
-            className="rounded-xl p-2 text-white md:hidden"
-            aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
-            aria-expanded={menuOpen}
-            aria-controls="mobile-navigation"
-            onClick={() => setMenuOpen((open) => !open)}
-          >
-            {menuOpen ? <X size={23} /> : <Menu size={23} />}
-          </button>
+          <div className="flex items-center gap-2 md:hidden">
+            <CartIndicator />
+            <button
+              type="button"
+              className="rounded-xl p-2 text-white"
+              aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+              aria-expanded={menuOpen}
+              aria-controls="mobile-navigation"
+              onClick={() => setMenuOpen((open) => !open)}
+            >
+              {menuOpen ? <X size={23} /> : <Menu size={23} />}
+            </button>
+          </div>
         </div>
 
         {menuOpen && (
