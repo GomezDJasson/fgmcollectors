@@ -172,14 +172,16 @@ function Cart() {
                 Hay productos cuya disponibilidad debe revisarse. Puedes retirarlos del carrito o ajustar sus cantidades.
               </p>
             )}
-            <button
-              type="button"
-              disabled
-              className="mt-6 w-full cursor-not-allowed rounded-full bg-white/10 px-5 py-3 text-sm font-bold text-white/35"
-              title="El proceso de pedido se habilitará en la siguiente etapa"
+            <Link
+              to="/checkout"
+              aria-disabled={hasUnavailableItems}
+              onClick={(event) => {
+                if (hasUnavailableItems) event.preventDefault();
+              }}
+              className={`mt-6 block w-full rounded-full px-5 py-3 text-center text-sm font-bold transition-colors ${hasUnavailableItems ? "cursor-not-allowed bg-white/10 text-white/35" : "bg-[#f6c945] text-[#211807] hover:bg-[#ffda68]"}`}
             >
-              Continuar al pedido próximamente
-            </button>
+              Continuar con el pedido
+            </Link>
             <p className="mt-3 text-center text-[11px] leading-5 text-white/30">
               Revisaremos disponibilidad y precio antes de confirmar tu pedido.
             </p>
