@@ -1,4 +1,4 @@
-
+import { Link } from "react-router-dom";
 import { Sparkles } from "lucide-react";
 import type { Product } from "../types/product";
 
@@ -16,7 +16,11 @@ function ProductCard({ product }: ProductCardProps) {
   const hasImage = Boolean(product.images.main);
 
   return (
-    <article className="group overflow-hidden rounded-2xl border border-white/10 bg-[#171222] transition-all duration-300 hover:-translate-y-1 hover:border-[#a78bfa]/40">
+    <Link
+      to={`/producto/${encodeURIComponent(product.id)}`}
+      className="group block overflow-hidden rounded-2xl border border-white/10 bg-[#171222] transition-all duration-300 hover:-translate-y-1 hover:border-[#a78bfa]/40 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f6c945]"
+      aria-label={`Ver detalles de ${product.name}`}
+    >
       <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden bg-[radial-gradient(ellipse_at_center,rgba(167,139,250,0.2),rgba(23,18,34,0.15)_65%)] p-5">
         {hasImage ? (
           <img
@@ -66,7 +70,7 @@ function ProductCard({ product }: ProductCardProps) {
           )}
         </div>
       </div>
-    </article>
+    </Link>
   );
 }
 
