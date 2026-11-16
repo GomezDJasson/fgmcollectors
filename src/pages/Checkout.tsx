@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { ArrowLeft, MessageCircle, ShieldCheck, ShoppingBag } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useCatalog } from "../context/CatalogContext";
 import { useCart } from "../context/CartContext";
 import { WHATSAPP_NUMBER } from "../constants/store";
@@ -39,7 +39,6 @@ const fieldClassName =
 function Checkout() {
   const { loading, error } = useCatalog();
   const { items, totalQuantity, subtotal } = useCart();
-  const navigate = useNavigate();
   const [details, setDetails] = useState<CustomerDetails>(initialDetails);
   const [accepted, setAccepted] = useState(false);
   const [formError, setFormError] = useState("");
@@ -79,7 +78,7 @@ function Checkout() {
         `  Cantidad: ${quantity}`,
         `  Precio unitario: ${currencyFormatter.format(product.price)}`,
         `  Total: ${currencyFormatter.format(product.price * quantity)}`,
-      ].join("\\n");
+      ].join("\n");
     });
 
     const message = [
@@ -106,7 +105,7 @@ function Checkout() {
       "Entiendo que el envío no está incluido y que su costo se confirmará por WhatsApp. También entiendo que este mensaje es una solicitud y que Nerdybles verificará disponibilidad y precio antes de confirmar el pedido.",
     ].filter(Boolean);
 
-    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message.join("\\n"))}`;
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message.join("\n"))}`;
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   };
 
