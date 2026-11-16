@@ -1,25 +1,7 @@
-import { useEffect, useState } from "react";
-import { getCatalog } from "../services/catalog";
-import type { CatalogResponse } from "../types/product";
+import { ArrowRight, Sparkles } from "lucide-react";
 import ProductCard from "../components/ProductCard";
-import {
-  ArrowRight,
-  Menu,
-  Search,
-  ShoppingBag,
-  Sparkles,
-  X,
-} from "lucide-react";
+import { useCatalog } from "../context/CatalogContext";
 import nerdBot from "../../nerdbot.png";
-
-const navigation = [
-  { label: "Inicio", href: "#inicio" },
-  { label: "Novedades", href: "#novedades" },
-  { label: "Destacados", href: "#destacados" },
-  { label: "Categorías", href: "#colecciones" },
-  { label: "Nuestra esencia", href: "#nosotros" },
-  { label: "Contacto", href: "#contacto" },
-];
 
 const categories = [
   {
@@ -40,111 +22,11 @@ const categories = [
 ];
 
 function Home() {
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const [catalog, setCatalog] = useState<CatalogResponse | null>(null);
-  const [catalogError, setCatalogError] = useState<string | null>(null);
-
-  useEffect(() => {
-    getCatalog()
-      .then(setCatalog)
-      .catch((error: unknown) => {
-        setCatalogError(
-          error instanceof Error ? error.message : "Error desconocido"
-        );
-      });
-  }, []);
-
-  const closeMenu = () => setMenuOpen(false);
+  const { catalog, loading, error } = useCatalog();
 
   return (
-    <div className="min-h-screen overflow-hidden bg-[#100d18] text-white">
-      <header className="relative z-20 border-b border-white/10 bg-[#100d18]/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between px-5 sm:px-8">
-          <a
-            href="#inicio"
-            className="flex items-center gap-3"
-            aria-label="Nerdybles, ir al inicio"
-            onClick={closeMenu}
-          >
-            <img
-              src={nerdBot}
-              alt=""
-              className="h-11 w-11 rounded-xl object-contain"
-            />
-            <span className="brand-name text-xl font-bold tracking-tight">Nerdybles</span>
-          </a>
+    <main>
 
-          <nav className="hidden items-center gap-8 md:flex" aria-label="Navegación principal">
-            {navigation.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="text-sm font-medium text-white/65 transition-colors hover:text-white"
-              >
-                {item.label}
-              </a>
-            ))}
-          </nav>
-
-          <div className="hidden items-center gap-3 md:flex">
-            <button
-              type="button"
-              aria-label="Buscar productos (próximamente)"
-              className="rounded-full p-2.5 text-white/70 transition-colors hover:bg-white/10 hover:text-white"
-            >
-              <Search size={19} />
-            </button>
-            <a
-              href="#colecciones"
-              className="inline-flex items-center gap-2 rounded-full bg-[#f6c945] px-5 py-2.5 text-sm font-bold text-[#211807] transition-transform hover:-translate-y-0.5 hover:bg-[#ffda68]"
-            >
-              <ShoppingBag size={16} />
-              Explorar
-            </a>
-          </div>
-
-          <button
-            type="button"
-            className="rounded-xl p-2 text-white md:hidden"
-            aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
-            aria-expanded={menuOpen}
-            aria-controls="mobile-navigation"
-            onClick={() => setMenuOpen((open) => !open)}
-          >
-            {menuOpen ? <X size={23} /> : <Menu size={23} />}
-          </button>
-        </div>
-
-        {menuOpen && (
-          <nav
-            id="mobile-navigation"
-            className="border-t border-white/10 bg-[#171222] px-5 py-4 md:hidden"
-            aria-label="Navegación móvil"
-          >
-            {navigation.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                onClick={closeMenu}
-                className="block rounded-lg px-3 py-3 text-sm font-medium text-white/75 transition-colors hover:bg-white/5 hover:text-white"
-              >
-                {item.label}
-              </a>
-            ))}
-            <a
-              href="#colecciones"
-              onClick={closeMenu}
-              className="mt-2 flex items-center justify-center gap-2 rounded-full bg-[#f6c945] px-5 py-3 text-sm font-bold text-[#211807]"
-            >
-              <ShoppingBag size={16} />
-              Explorar colecciones
-            </a>
-          </nav>
-        )}
-      </header>
-
-      <main>
         <section
           id="inicio"
           className="relative isolate scroll-mt-20"
@@ -258,7 +140,7 @@ function Home() {
               </p>
             </div>
 
-            {catalogError ? (
+            {error ? (
               <div className="rounded-3xl border border-red-400/20 bg-[#171222] px-6 py-12 text-center">
                 <h3 className="text-xl font-bold">
                   No pudimos cargar los productos
@@ -267,7 +149,7 @@ function Home() {
                   Estamos teniendo dificultades para conectar con nuestro catálogo.
                 </p>
               </div>
-            ) : !catalog ? (
+            ) : loading ? (
               <div className="rounded-3xl border border-white/10 bg-[#171222] px-6 py-12 text-center">
                 <p className="text-sm text-white/50">
                   Cargando productos destacados...
@@ -360,26 +242,8 @@ function Home() {
             </div>
           </div>
         </section>
-      </main>
 
-      <footer id="contacto" className="scroll-mt-20 border-t border-white/10 bg-[#0b0910]">
-        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-5 py-9 sm:px-8 md:flex-row md:items-center md:justify-between">
-          <a href="#inicio" className="flex items-center gap-3">
-            <img src={nerdBot} alt="" className="h-10 w-10 object-contain" />
-            <span className="brand-name text-lg font-bold tracking-tight">Nerdybles</span>
-          </a>
-          <p className="text-sm text-white/40">
-            Un universo para quienes disfrutan coleccionar.
-          </p>
-          <span className="text-sm font-medium text-white/40">
-            Canales de contacto próximamente
-          </span>
-        </div>
-        <div className="border-t border-white/[0.06] px-5 py-5 text-center text-xs text-white/30">
-          © {new Date().getFullYear()} Nerdybles. Todos los derechos reservados.
-        </div>
-      </footer>
-    </div>
+    </main>
   );
 }
 
