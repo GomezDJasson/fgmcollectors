@@ -43,7 +43,11 @@ function Cart() {
   }
 
   const hasUnavailableItems = items.some(
-    (item) => !item.product || item.product.availability !== "Disponible" || item.product.stock <= 0
+    (item) =>
+      !item.product ||
+      item.product.availability !== "Disponible" ||
+      item.product.stock <= 0 ||
+      item.quantity > item.product.stock
   );
 
   return (
