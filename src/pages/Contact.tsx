@@ -1,6 +1,27 @@
-import { ArrowUpRight, MessageCircle, PackageCheck, Truck } from "lucide-react";
+import {
+  ArrowUpRight,
+  AtSign,
+  Facebook,
+  Instagram,
+  Mail,
+  MessageCircle,
+  PackageCheck,
+  Send,
+  Truck,
+  Youtube,
+} from "lucide-react";
 
 const whatsappUrl = "https://wa.me/573156679984";
+
+const socialLinks = [
+  { name: "Instagram", href: "https://www.instagram.com/nerdybles/", icon: Instagram },
+  { name: "Facebook", href: "https://www.facebook.com/nerdybles", icon: Facebook },
+  { name: "TikTok", href: "https://www.tiktok.com/@juliethmar8", icon: AtSign },
+  { name: "X", href: "https://x.com/nerdybles", icon: AtSign },
+  { name: "YouTube", href: "https://www.youtube.com/@nerdybles", icon: Youtube },
+  { name: "Threads", href: "https://www.threads.net/@nerdybles", icon: AtSign },
+  { name: "Telegram", href: "https://t.me/nerdybles", icon: Send },
+];
 
 function Contact() {
   return (
@@ -19,7 +40,7 @@ function Contact() {
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-8 text-white/60 sm:text-lg">
             ¿Tienes una pregunta sobre un producto o quieres conocer el estado de tu pedido?
-            Escríbenos por WhatsApp y conversemos.
+            Escríbenos y conversemos por el canal que prefieras.
           </p>
         </div>
       </section>
@@ -44,6 +65,18 @@ function Contact() {
             <ArrowUpRight size={18} />
           </a>
           <p className="mt-5 text-sm font-medium text-white/45">+57 315 667 9984</p>
+
+          <div className="mt-8 border-t border-white/10 pt-6">
+            <h3 className="font-bold">Correo electrónico</h3>
+            <a
+              href="mailto:nerdybles@gmail.com"
+              className="mt-3 inline-flex items-center gap-2 text-sm text-[#c4b5fd] transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f6c945]"
+            >
+              <Mail size={17} />
+              nerdybles@gmail.com
+              <ArrowUpRight size={15} />
+            </a>
+          </div>
         </div>
 
         <div className="flex flex-col gap-4">
@@ -74,6 +107,34 @@ function Contact() {
             Los pedidos realizados desde la tienda son solicitudes sujetas a confirmación
             de disponibilidad, precio y envío.
           </p>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-5 pb-20 sm:px-8">
+        <div className="rounded-3xl border border-white/10 bg-[#171222] p-7 sm:p-10">
+          <div className="text-center">
+            <p className="text-xs font-bold tracking-[0.22em] text-[#f6c945]">SÍGUENOS</p>
+            <h2 className="mt-3 text-2xl font-bold sm:text-3xl">Nerdybles en redes</h2>
+            <p className="mt-3 text-sm text-white/50">
+              Encuentra novedades, coleccionables y contenido en nuestras comunidades.
+            </p>
+          </div>
+          <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+            {socialLinks.map(({ name, href, icon: Icon }) => (
+              <a
+                key={name}
+                href={href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`Visitar Nerdybles en ${name}`}
+                className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm font-semibold text-white/75 transition-colors hover:border-[#a78bfa]/40 hover:bg-[#7c3aed]/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6c945]"
+              >
+                <Icon size={18} />
+                {name}
+                <ArrowUpRight size={14} className="text-white/35" />
+              </a>
+            ))}
+          </div>
         </div>
       </section>
     </main>
