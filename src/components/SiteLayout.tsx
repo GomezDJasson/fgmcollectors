@@ -7,7 +7,7 @@ import nerdBot from "../../nerdbot.png";
 const navigation = [
   { label: "Inicio", to: "/" },
   { label: "Tienda", to: "/tienda" },
-  { label: "Contacto", to: "/#contacto" },
+  { label: "Contacto", to: "/contacto" },
 ];
 
 function CartIndicator() {
@@ -108,9 +108,14 @@ function SiteLayout() {
           <p className="text-sm text-white/40">
             Un universo para quienes disfrutan coleccionar.
           </p>
-          <span className="text-sm font-medium text-white/40">
-            Canales de contacto próximamente
-          </span>
+          <a
+            href="https://wa.me/573156679984"
+            target="_blank"
+            rel="noreferrer"
+            className="text-sm font-semibold text-[#c4b5fd] transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f6c945]"
+          >
+            Escríbenos por WhatsApp
+          </a>
         </div>
         <div className="border-t border-white/[0.06] px-5 py-5 text-center text-xs text-white/30">
           © {new Date().getFullYear()} Nerdybles. Todos los derechos reservados.
