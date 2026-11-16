@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getCatalog } from "./services/catalog";
+import type { CatalogResponse } from "./types/product";
+import ProductCard from "./components/ProductCard";
 import {
   ArrowRight,
   Menu,
@@ -38,6 +41,19 @@ const categories = [
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const [catalog, setCatalog] = useState<CatalogResponse | null>(null);
+  const [catalogError, setCatalogError] = useState<string | null>(null);
+
+  useEffect(() => {
+    getCatalog()
+      .then(setCatalog)
+      .catch((error: unknown) => {
+        setCatalogError(
+          error instanceof Error ? error.message : "Error desconocido"
+        );
+      });
+  }, []);
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -224,19 +240,61 @@ function App() {
           </div>
         </section>
 
-        <section id="destacados" className="scroll-mt-20 border-y border-white/10 bg-white/[0.025]">
+        
+        <section
+          id="destacados"
+          className="scroll-mt-20 border-y border-white/10 bg-white/[0.025]"
+        >
           <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8">
             <div className="mb-10">
-              <p className="text-xs font-bold tracking-[0.22em] text-[#a78bfa]">SELECCIÓN NERDYBLES</p>
-              <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Productos destacados</h2>
+              <p className="text-xs font-bold tracking-[0.22em] text-[#a78bfa]">
+                SELECCIÓN NERDYBLES
+              </p>
+              <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
+                Productos destacados
+              </h2>
+              <p className="mt-3 max-w-md text-sm leading-7 text-white/50">
+                Descubre algunas de las piezas seleccionadas de nuestro catálogo.
+              </p>
             </div>
-            <div className="rounded-3xl border border-dashed border-[#a78bfa]/30 bg-[#171222]/70 px-6 py-12 text-center sm:px-12">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#7c3aed]/15 text-[#c4b5fd]"><Sparkles size={25} /></div>
-              <h3 className="mt-5 text-xl font-bold">Estamos preparando algo especial</h3>
-              <p className="mx-auto mt-2 max-w-lg text-sm leading-7 text-white/50">Muy pronto podrás descubrir aquí los productos seleccionados de Nerdybles.</p>
-            </div>
+
+            {catalogError ? (
+              <div className="rounded-3xl border border-red-400/20 bg-[#171222] px-6 py-12 text-center">
+                <h3 className="text-xl font-bold">
+                  No pudimos cargar los productos
+                </h3>
+                <p className="mt-2 text-sm text-white/50">
+                  Estamos teniendo dificultades para conectar con nuestro catálogo.
+                </p>
+              </div>
+            ) : !catalog ? (
+              <div className="rounded-3xl border border-white/10 bg-[#171222] px-6 py-12 text-center">
+                <p className="text-sm text-white/50">
+                  Cargando productos destacados...
+                </p>
+              </div>
+            ) : catalog.featured.length === 0 ? (
+              <div className="rounded-3xl border border-dashed border-[#a78bfa]/30 bg-[#171222]/70 px-6 py-12 text-center sm:px-12">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#7c3aed]/15 text-[#c4b5fd]">
+                  <Sparkles size={25} />
+                </div>
+                <h3 className="mt-5 text-xl font-bold">
+                  Estamos preparando algo especial
+                </h3>
+                <p className="mx-auto mt-2 max-w-lg text-sm leading-7 text-white/50">
+                  Pronto encontrarás aquí una selección de productos destacados.
+                </p>
+              </div>
+            ) : (
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {catalog.featured.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            )}
           </div>
         </section>
+
 
         <section id="colecciones" className="scroll-mt-20 border-y border-white/10 bg-white/[0.025]">
           <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8">
