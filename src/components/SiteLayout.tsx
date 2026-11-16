@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import { Menu, ShoppingBag, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import nerdBot from "../../nerdbot.png";
 
 const navigation = [
@@ -68,14 +68,6 @@ function SiteLayout() {
                 {item.label}
               </Link>
             ))}
-            <Link
-              to="/tienda"
-              onClick={closeMenu}
-              className="mt-2 flex items-center justify-center gap-2 rounded-full bg-[#f6c945] px-5 py-3 text-sm font-bold text-[#211807]"
-            >
-              <ShoppingBag size={16} />
-              Explorar tienda
-            </Link>
           </nav>
         )}
       </header>
