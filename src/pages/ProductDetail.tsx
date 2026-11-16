@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, Check, MessageCircle, Package, Sparkles } from "lucide-react";
+import { ArrowLeft, Check, ChevronLeft, ChevronRight, MessageCircle, Package, Sparkles } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { useCatalog } from "../context/CatalogContext";
 
@@ -19,6 +19,19 @@ function ProductDetail() {
   const [selectedImage, setSelectedImage] = useState("");
 
   const activeImage = images.includes(selectedImage) ? selectedImage : images[0];
+  const activeImageIndex = images.indexOf(activeImage);
+
+  const showPreviousImage = () => {
+    if (images.length > 1) {
+      setSelectedImage(images[(activeImageIndex - 1 + images.length) % images.length]);
+    }
+  };
+
+  const showNextImage = () => {
+    if (images.length > 1) {
+      setSelectedImage(images[(activeImageIndex + 1) % images.length]);
+    }
+  };
 
   if (loading) {
     return (
@@ -106,8 +119,28 @@ function ProductDetail() {
                   <span className="text-sm">Imagen próximamente</span>
                 </div>
               )}
+              {images.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={showPreviousImage}
+                    aria-label="Ver fotografía anterior"
+                    className="absolute left-3 top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-[#100d18]/75 text-white shadow-lg backdrop-blur transition-colors hover:bg-[#6f3abe] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6c945] sm:left-5 sm:size-12"
+                  >
+                    <ChevronLeft size={24} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={showNextImage}
+                    aria-label="Ver fotografía siguiente"
+                    className="absolute right-3 top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-[#100d18]/75 text-white shadow-lg backdrop-blur transition-colors hover:bg-[#6f3abe] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6c945] sm:right-5 sm:size-12"
+                  >
+                    <ChevronRight size={24} />
+                  </button>
+                </>
+              )}
               {product.availability === "Agotado" && (
-                <span className="absolute right-4 top-4 rounded-full bg-black/60 px-4 py-2 text-xs font-bold text-white backdrop-blur">
+                <span className="absolute right-4 top-4 z-10 rounded-full bg-black/60 px-4 py-2 text-xs font-bold text-white backdrop-blur">
                   Agotado
                 </span>
               )}
