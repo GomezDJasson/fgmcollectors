@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import { Facebook, Instagram, Mail, Menu, MessageCircle, Send, ShoppingCart, X, Youtube } from "lucide-react";
+import { Facebook, Instagram, Mail, Menu, MessageCircle, ShoppingCart, X, Youtube } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import nerdBot from "../../nerdbot.png";
 
