@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import { Menu, ShoppingCart, X } from "lucide-react";
+import { Facebook, Instagram, Mail, Menu, MessageCircle, Send, ShoppingCart, X, Youtube } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import nerdBot from "../../nerdbot.png";
 
@@ -8,6 +8,15 @@ const navigation = [
   { label: "Inicio", to: "/" },
   { label: "Tienda", to: "/tienda" },
   { label: "Contacto", to: "/contacto" },
+];
+
+const socialLinks = [
+  { label: "Instagram", href: "https://www.instagram.com/nerdybles/", icon: Instagram },
+  { label: "Facebook", href: "https://www.facebook.com/nerdybles", icon: Facebook },
+  { label: "TikTok", href: "https://www.tiktok.com/@juliethmar8", icon: null },
+  { label: "X", href: "https://x.com/nerdybles", icon: null },
+  { label: "YouTube", href: "https://www.youtube.com/@nerdybles", icon: Youtube },
+  { label: "Threads", href: "https://www.threads.net/@nerdybles", icon: null },
 ];
 
 function CartIndicator() {
@@ -108,19 +117,54 @@ function SiteLayout() {
           <p className="text-sm text-white/40">
             Un universo para quienes disfrutan coleccionar.
           </p>
-          <a
-            href="https://wa.me/573156679984"
-            target="_blank"
-            rel="noreferrer"
-            className="text-sm font-semibold text-[#c4b5fd] transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f6c945]"
-          >
-            Escríbenos por WhatsApp
-          </a>
+          <div className="flex flex-col gap-3">
+            <a
+              href="https://wa.me/573156679984"
+              target="_blank"
+              rel="noreferrer"
+              className="text-sm font-semibold text-[#c4b5fd] transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f6c945]"
+            >
+              Escríbenos por WhatsApp
+            </a>
+            <a
+              href="mailto:nerdybles@gmail.com"
+              className="inline-flex items-center gap-2 text-sm text-white/55 transition-colors hover:text-white"
+            >
+              <Mail size={15} />
+              nerdybles@gmail.com
+            </a>
+            <div className="flex items-center gap-3" aria-label="Redes sociales de Nerdybles">
+              {socialLinks.map(({ label, href, icon: Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={label}
+                  title={label}
+                  className="flex size-8 items-center justify-center rounded-lg text-white/45 transition-colors hover:bg-white/10 hover:text-[#c4b5fd] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6c945]"
+                >
+                  {Icon ? <Icon size={17} /> : <span className="text-xs font-bold">{label === "Threads" ? "@" : label}</span>}
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
         <div className="border-t border-white/[0.06] px-5 py-5 text-center text-xs text-white/30">
           © {new Date().getFullYear()} Nerdybles. Todos los derechos reservados.
         </div>
       </footer>
+
+      <a
+        href="https://wa.me/573156679984"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Contactar a Nerdybles por WhatsApp"
+        title="Escríbenos por WhatsApp"
+        className="fixed bottom-5 right-5 z-40 flex size-14 items-center justify-center rounded-full border border-white/15 bg-[#25D366] text-[#082b17] shadow-[0_8px_30px_rgba(37,211,102,0.3)] transition-transform hover:-translate-y-1 hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f6c945] sm:bottom-7 sm:right-7"
+      >
+        <MessageCircle size={25} />
+      </a>
     </div>
   );
 }
