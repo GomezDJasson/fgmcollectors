@@ -5,10 +5,7 @@ import nerdBot from "../../nerdbot.png";
 
 const navigation = [
   { label: "Inicio", to: "/" },
-  { label: "Novedades", to: "/#novedades" },
-  { label: "Destacados", to: "/#destacados" },
-  { label: "Categorías", to: "/#colecciones" },
-  { label: "Nuestra esencia", to: "/#nosotros" },
+  { label: "Tienda", to: "/tienda" },
   { label: "Contacto", to: "/#contacto" },
 ];
 
@@ -17,8 +14,8 @@ function SiteLayout() {
   const closeMenu = () => setMenuOpen(false);
 
   return (
-    <div className="min-h-screen overflow-hidden bg-[#100d18] text-white">
-      <header className="relative z-20 border-b border-white/10 bg-[#100d18]/90 backdrop-blur-xl">
+    <div className="min-h-screen overflow-x-clip bg-[#100d18] text-white">
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#100d18]/90 backdrop-blur-xl">
         <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between px-5 sm:px-8">
           <Link
             to="/"
@@ -42,15 +39,6 @@ function SiteLayout() {
             ))}
           </nav>
 
-          <div className="hidden items-center gap-3 md:flex">
-            <Link
-              to="/tienda"
-              className="inline-flex items-center gap-2 rounded-full bg-[#f6c945] px-5 py-2.5 text-sm font-bold text-[#211807] transition-transform hover:-translate-y-0.5 hover:bg-[#ffda68]"
-            >
-              <ShoppingBag size={16} />
-              Explorar tienda
-            </Link>
-          </div>
 
           <button
             type="button"
