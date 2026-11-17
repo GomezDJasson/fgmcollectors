@@ -5,17 +5,18 @@ import {
   PackageCheck,
   Truck,
 } from "lucide-react";
+import SocialIcon, { type SocialNetwork } from "../components/SocialIcon";
 
 const whatsappUrl = "https://wa.me/573156679984";
 
-const socialLinks = [
-  { name: "Instagram", href: "https://www.instagram.com/nerdybles/", mark: "◎" },
-  { name: "Facebook", href: "https://www.facebook.com/nerdybles", mark: "f" },
-  { name: "TikTok", href: "https://www.tiktok.com/@juliethmar8", mark: "♪" },
-  { name: "X", href: "https://x.com/nerdybles", mark: "𝕏" },
-  { name: "YouTube", href: "https://www.youtube.com/@nerdybles", mark: "▶" },
-  { name: "Threads", href: "https://www.threads.net/@nerdybles", mark: "@" },
-  { name: "Telegram", href: "https://t.me/nerdybles", mark: "➤" },
+const socialLinks: { name: SocialNetwork; href: string }[] = [
+  { name: "Instagram", href: "https://www.instagram.com/nerdybles/" },
+  { name: "Facebook", href: "https://www.facebook.com/nerdybles" },
+  { name: "TikTok", href: "https://www.tiktok.com/@juliethmar8" },
+  { name: "X", href: "https://x.com/nerdybles" },
+  { name: "YouTube", href: "https://www.youtube.com/@nerdybles" },
+  { name: "Threads", href: "https://www.threads.net/@nerdybles" },
+  { name: "Telegram", href: "https://t.me/nerdybles" },
 ];
 
 function Contact() {
@@ -115,7 +116,7 @@ function Contact() {
             </p>
           </div>
           <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-            {socialLinks.map(({ name, href, mark }) => (
+            {socialLinks.map(({ name, href }) => (
               <a
                 key={name}
                 href={href}
@@ -124,7 +125,7 @@ function Contact() {
                 aria-label={`Visitar Nerdybles en ${name}`}
                 className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm font-semibold text-white/75 transition-colors hover:border-[#a78bfa]/40 hover:bg-[#7c3aed]/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6c945]"
               >
-                <span className="text-base font-bold">{mark}</span>
+                <SocialIcon name={name} className="size-5" />
                 {name}
                 <ArrowUpRight size={14} className="text-white/35" />
               </a>
