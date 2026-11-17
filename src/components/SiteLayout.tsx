@@ -117,23 +117,26 @@ function SiteLayout() {
           <p className="text-sm text-white/40">
             Un universo para quienes disfrutan coleccionar.
           </p>
-          <div className="flex flex-col gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <a
               href="https://wa.me/573156679984"
               target="_blank"
               rel="noreferrer"
-              className="text-sm font-semibold text-[#c4b5fd] transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f6c945]"
+              aria-label="Contactar a Nerdybles por WhatsApp"
+              title="WhatsApp"
+              className="flex size-10 items-center justify-center rounded-lg text-white/55 transition-colors hover:bg-white/10 hover:text-[#c4b5fd] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6c945]"
             >
-              Escríbenos por WhatsApp
+              <MessageCircle size={21} />
             </a>
             <a
               href="mailto:nerdybles@gmail.com"
-              className="inline-flex items-center gap-2 text-sm text-white/55 transition-colors hover:text-white"
+              aria-label="Enviar correo a Nerdybles"
+              title="Correo electrónico"
+              className="flex size-10 items-center justify-center rounded-lg text-white/55 transition-colors hover:bg-white/10 hover:text-[#c4b5fd] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6c945]"
             >
-              <Mail size={15} />
-              nerdybles@gmail.com
+              <Mail size={21} />
             </a>
-            <div className="flex items-center gap-3" aria-label="Redes sociales de Nerdybles">
+            <div className="flex items-center gap-2 sm:gap-3" aria-label="Redes sociales de Nerdybles">
               {socialLinks.map(({ label, href, mark }) => (
                 <a
                   key={label}
@@ -142,9 +145,9 @@ function SiteLayout() {
                   rel="noreferrer"
                   aria-label={label}
                   title={label}
-                  className="flex size-8 items-center justify-center rounded-lg text-white/45 transition-colors hover:bg-white/10 hover:text-[#c4b5fd] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6c945]"
+                  className="flex size-10 items-center justify-center rounded-lg text-white/45 transition-colors hover:bg-white/10 hover:text-[#c4b5fd] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6c945]"
                 >
-                  <span className="text-sm font-bold">{mark}</span>
+                  <span className="text-lg font-bold">{mark}</span>
                 </a>
               ))}
             </div>
