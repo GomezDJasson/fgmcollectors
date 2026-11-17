@@ -256,9 +256,18 @@ function Checkout() {
             <div className="border-t border-white/10" />
 
             <label className="flex cursor-pointer items-start gap-3 text-sm leading-6 text-white/65">
-              <input type="checkbox" checked={accepted} onChange={(event) => setAccepted(event.target.checked)} className="mt-1 size-4 shrink-0 accent-[#a78bfa]" />
+              <input type="checkbox" required checked={accepted} onChange={(event) => setAccepted(event.target.checked)} className="mt-1 size-4 shrink-0 accent-[#a78bfa]" />
               <span>
-                Autorizo a Nerdybles a utilizar los datos que proporciono para gestionar esta solicitud de pedido y contactarme sobre ella. Entiendo que el formulario no guarda mis datos en una cuenta o base de datos de Nerdybles; al continuar se abrirá WhatsApp para que yo envíe el mensaje.
+                Autorizo a Nerdybles a utilizar los datos que proporciono para gestionar esta solicitud de pedido y contactarme sobre ella. He leído la{" "}
+                <Link
+                  to="/politica-de-tratamiento-de-datos"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-semibold text-[#c4b5fd] underline underline-offset-4 hover:text-white"
+                >
+                  Política de Tratamiento de Datos Personales
+                </Link>
+                . Entiendo que el formulario no guarda mis datos en una cuenta o base de datos de Nerdybles; al continuar se abrirá WhatsApp para que yo envíe el mensaje.
                 <span className="text-[#f6c945]"> *</span>
               </span>
             </label>
