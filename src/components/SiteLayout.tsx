@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import { Mail, Menu, MessageCircle, ShoppingCart, X } from "lucide-react";
+import { Menu, MessageCircle, ShoppingCart, X } from "lucide-react";
+import SocialIcon, { type SocialNetwork } from "./SocialIcon";
 import { useCart } from "../context/CartContext";
 import nerdBot from "../../nerdbot.png";
 
@@ -10,13 +11,13 @@ const navigation = [
   { label: "Contacto", to: "/contacto" },
 ];
 
-const socialLinks = [
-  { label: "Instagram", href: "https://www.instagram.com/nerdybles/", mark: "◎" },
-  { label: "Facebook", href: "https://www.facebook.com/nerdybles", mark: "f" },
-  { label: "TikTok", href: "https://www.tiktok.com/@juliethmar8", mark: "♪" },
-  { label: "X", href: "https://x.com/nerdybles", mark: "𝕏" },
-  { label: "YouTube", href: "https://www.youtube.com/@nerdybles", mark: "▶" },
-  { label: "Threads", href: "https://www.threads.net/@nerdybles", mark: "@" },
+const socialLinks: { label: SocialNetwork; href: string }[] = [
+  { label: "Instagram", href: "https://www.instagram.com/nerdybles/" },
+  { label: "Facebook", href: "https://www.facebook.com/nerdybles" },
+  { label: "TikTok", href: "https://www.tiktok.com/@juliethmar8" },
+  { label: "X", href: "https://x.com/nerdybles" },
+  { label: "YouTube", href: "https://www.youtube.com/@nerdybles" },
+  { label: "Threads", href: "https://www.threads.net/@nerdybles" },
 ];
 
 function CartIndicator() {
@@ -117,27 +118,10 @@ function SiteLayout() {
           <p className="text-sm text-white/40">
             Un universo para quienes disfrutan coleccionar.
           </p>
-          <div className="flex items-center gap-2 sm:gap-3">
-            <a
-              href="https://wa.me/573156679984"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Contactar a Nerdybles por WhatsApp"
-              title="WhatsApp"
-              className="flex size-10 items-center justify-center rounded-lg text-white/55 transition-colors hover:bg-white/10 hover:text-[#c4b5fd] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6c945]"
-            >
-              <MessageCircle size={21} />
-            </a>
-            <a
-              href="mailto:nerdybles@gmail.com"
-              aria-label="Enviar correo a Nerdybles"
-              title="Correo electrónico"
-              className="flex size-10 items-center justify-center rounded-lg text-white/55 transition-colors hover:bg-white/10 hover:text-[#c4b5fd] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6c945]"
-            >
-              <Mail size={21} />
-            </a>
+          <div className="flex flex-col gap-3">
+            <p className="text-sm font-semibold text-white/70">Síguenos en redes</p>
             <div className="flex items-center gap-2 sm:gap-3" aria-label="Redes sociales de Nerdybles">
-              {socialLinks.map(({ label, href, mark }) => (
+              {socialLinks.map(({ label, href }) => (
                 <a
                   key={label}
                   href={href}
@@ -145,9 +129,9 @@ function SiteLayout() {
                   rel="noreferrer"
                   aria-label={label}
                   title={label}
-                  className="flex size-10 items-center justify-center rounded-lg text-white/45 transition-colors hover:bg-white/10 hover:text-[#c4b5fd] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6c945]"
+                  className="flex size-10 items-center justify-center rounded-lg bg-white/[0.04] transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6c945]"
                 >
-                  <span className="text-lg font-bold">{mark}</span>
+                  <SocialIcon name={label} className="size-5" />
                 </a>
               ))}
             </div>
