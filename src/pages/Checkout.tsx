@@ -42,6 +42,7 @@ function Checkout() {
   const navigate = useNavigate();
   const [details, setDetails] = useState<CustomerDetails>(initialDetails);
   const [accepted, setAccepted] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [formError, setFormError] = useState("");
   const [orderPrepared, setOrderPrepared] = useState(false);
   const [whatsappUrl, setWhatsappUrl] = useState("");
@@ -69,8 +70,8 @@ function Checkout() {
       return;
     }
 
-    if (!accepted) {
-      setFormError("Debes aceptar el uso de tus datos para gestionar la solicitud.");
+    if (!accepted || !acceptedTerms) {
+      setFormError("Debes aceptar el tratamiento de tus datos y confirmar que has leído los términos y condiciones.");
       return;
     }
 
@@ -268,6 +269,23 @@ function Checkout() {
                   Política de Tratamiento de Datos Personales
                 </Link>
                 . Entiendo que el formulario no guarda mis datos en una cuenta o base de datos de Nerdybles; al continuar se abrirá WhatsApp para que yo envíe el mensaje.
+                <span className="text-[#f6c945]"> *</span>
+              </span>
+            </label>
+
+            <label className="flex cursor-pointer items-start gap-3 text-sm leading-6 text-white/65">
+              <input type="checkbox" required checked={acceptedTerms} onChange={(event) => setAcceptedTerms(event.target.checked)} className="mt-1 size-4 shrink-0 accent-[#a78bfa]" />
+              <span>
+                He leído y acepto los{" "}
+                <Link
+                  to="/terminos-y-condiciones"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-semibold text-[#c4b5fd] underline underline-offset-4 hover:text-white"
+                >
+                  Términos y Condiciones de Compra
+                </Link>
+                .
                 <span className="text-[#f6c945]"> *</span>
               </span>
             </label>
