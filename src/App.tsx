@@ -8,6 +8,7 @@ import Contact from "./pages/Contact";
 import Home from "./pages/Home";
 import ProductDetail from "./pages/ProductDetail";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsAndConditions from "./pages/TermsAndConditions";
 import Shop from "./pages/Shop";
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
               <Route path="/tienda" element={<Shop />} />
               <Route path="/contacto" element={<Contact />} />
               <Route path="/politica-de-tratamiento-de-datos" element={<PrivacyPolicy />} />
+              <Route path="/terminos-y-condiciones" element={<TermsAndConditions />} />
               <Route path="/producto/:id" element={<ProductDetail />} />
               <Route path="/carrito" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
