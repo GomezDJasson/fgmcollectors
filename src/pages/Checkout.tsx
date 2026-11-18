@@ -262,8 +262,6 @@ function Checkout() {
                 Autorizo a Nerdybles a utilizar los datos que proporciono para gestionar esta solicitud de pedido y contactarme sobre ella. He leído la{" "}
                 <Link
                   to="/politica-de-tratamiento-de-datos"
-                  target="_blank"
-                  rel="noreferrer"
                   className="font-semibold text-[#c4b5fd] underline underline-offset-4 hover:text-white"
                 >
                   Política de Tratamiento de Datos Personales
@@ -279,8 +277,6 @@ function Checkout() {
                 He leído y acepto los{" "}
                 <Link
                   to="/terminos-y-condiciones"
-                  target="_blank"
-                  rel="noreferrer"
                   className="font-semibold text-[#c4b5fd] underline underline-offset-4 hover:text-white"
                 >
                   Términos y Condiciones de Compra
