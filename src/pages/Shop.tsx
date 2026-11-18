@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import ProductCard from "../components/ProductCard";
 import { useCatalog } from "../context/CatalogContext";
@@ -7,17 +8,33 @@ type AvailabilityFilter = "Todos" | "Disponible" | "Agotado";
 
 function Shop() {
   const { catalog, loading, error } = useCatalog();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("Todas");
   const [brand, setBrand] = useState("Todas");
   const [availability, setAvailability] = useState<AvailabilityFilter>("Todos");
 
   const products = catalog?.products ?? [];
 
   const categories = useMemo(
-    () => [...new Set(products.map((product) => product.category).filter(Boolean))].sort(),
+    () =>
+      [...new Set(products.map((product) => product.category.trim()).filter(Boolean))].sort(
+        (a, b) => a.localeCompare(b, "es", { sensitivity: "base" })
+      ),
     [products]
   );
+
+  const requestedCategory = searchParams.get("categoria") ?? "Todas";
+  const category = categories.includes(requestedCategory) ? requestedCategory : "Todas";
+
+  const updateCategory = (value: string) => {
+    const nextParams = new URLSearchParams(searchParams);
+    if (value === "Todas") {
+      nextParams.delete("categoria");
+    } else {
+      nextParams.set("categoria", value);
+    }
+    setSearchParams(nextParams);
+  };
   const brands = useMemo(
     () => [...new Set(products.map((product) => product.brand).filter(Boolean))].sort(),
     [products]
@@ -45,7 +62,7 @@ function Shop() {
 
   const clearFilters = () => {
     setSearch("");
-    setCategory("Todas");
+    setSearchParams({});
     setBrand("Todas");
     setAvailability("Todos");
   };
@@ -108,7 +125,7 @@ function Shop() {
               <span className="mb-1.5 block text-xs font-semibold text-white/45">Categoría</span>
               <select
                 value={category}
-                onChange={(event) => setCategory(event.target.value)}
+                onChange={(event) => updateCategory(event.target.value)}
                 className="w-full rounded-xl border border-white/10 bg-[#100d18] px-3 py-3 text-sm text-white outline-none focus:border-[#a78bfa]"
               >
                 <option value="Todas">Todas las categorías</option>
