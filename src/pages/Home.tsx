@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { ArrowRight, Sparkles } from "lucide-react";
 import ProductCard from "../components/ProductCard";
 import { useCatalog } from "../context/CatalogContext";
@@ -23,6 +24,22 @@ const categories = [
 
 function Home() {
   const { catalog, loading, error } = useCatalog();
+
+  const newestProducts = useMemo(
+    () =>
+      (catalog?.products ?? [])
+        .filter(
+          (product) =>
+            product.dateAdded &&
+            !Number.isNaN(Date.parse(product.dateAdded))
+        )
+        .sort(
+          (a, b) =>
+            Date.parse(b.dateAdded) - Date.parse(a.dateAdded)
+        )
+        .slice(0, 4),
+    [catalog?.products]
+  );
 
   return (
     <main>
@@ -96,7 +113,6 @@ function Home() {
           </div>
         </section>
 
-
         <section id="novedades" className="scroll-mt-20">
           <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8">
             <div className="mb-10 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
@@ -106,23 +122,38 @@ function Home() {
               </div>
               <p className="max-w-md text-sm leading-7 text-white/50">Descubre las últimas piezas que se suman al universo Nerdybles.</p>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {[1, 2, 3].map((item) => (
-                <article key={item} className="overflow-hidden rounded-2xl border border-white/10 bg-[#171222]">
-                  <div className="flex aspect-[4/3] items-center justify-center bg-[radial-gradient(ellipse_at_center,rgba(167,139,250,0.2),rgba(23,18,34,0.15)_65%)]">
-                    <Sparkles size={34} className="text-[#a78bfa]/60" />
-                  </div>
-                  <div className="p-5">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-[#a78bfa]">Próximamente</span>
-                    <p className="mt-2 text-sm text-white/55">Aquí encontrarás los productos más recientes.</p>
-                  </div>
-                </article>
-              ))}
-            </div>
+
+            {error ? (
+              <div className="rounded-3xl border border-red-400/20 bg-[#171222] px-6 py-12 text-center">
+                <h3 className="text-xl font-bold">No pudimos cargar las novedades</h3>
+                <p className="mt-2 text-sm text-white/50">
+                  Estamos teniendo dificultades para conectar con nuestro catálogo.
+                </p>
+              </div>
+            ) : loading ? (
+              <div className="rounded-3xl border border-white/10 bg-[#171222] px-6 py-12 text-center">
+                <p className="text-sm text-white/50">Cargando las últimas incorporaciones...</p>
+              </div>
+            ) : newestProducts.length === 0 ? (
+              <div className="rounded-3xl border border-dashed border-[#a78bfa]/30 bg-[#171222]/70 px-6 py-12 text-center">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#7c3aed]/15 text-[#c4b5fd]">
+                  <Sparkles size={25} />
+                </div>
+                <h3 className="mt-5 text-xl font-bold">Pronto tendremos novedades</h3>
+                <p className="mx-auto mt-2 max-w-lg text-sm leading-7 text-white/50">
+                  Estamos preparando nuevas incorporaciones para nuestra colección.
+                </p>
+              </div>
+            ) : (
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {newestProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
-        
         <section
           id="destacados"
           className="scroll-mt-20 border-y border-white/10 bg-white/[0.025]"
@@ -155,7 +186,7 @@ function Home() {
                   Cargando productos destacados...
                 </p>
               </div>
-            ) : catalog.featured.length === 0 ? (
+            ) : catalog?.featured.length === 0 ? (
               <div className="rounded-3xl border border-dashed border-[#a78bfa]/30 bg-[#171222]/70 px-6 py-12 text-center sm:px-12">
                 <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#7c3aed]/15 text-[#c4b5fd]">
                   <Sparkles size={25} />
@@ -169,14 +200,13 @@ function Home() {
               </div>
             ) : (
               <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {catalog.featured.map((product) => (
+                {catalog?.featured.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
               </div>
             )}
           </div>
         </section>
-
 
         <section id="colecciones" className="scroll-mt-20 border-y border-white/10 bg-white/[0.025]">
           <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8">
