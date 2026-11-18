@@ -2,6 +2,7 @@ export interface Product {
   id: string;
   sku: string;
   name: string;
+  dateAdded: string;
   brand: string;
   line: string;
   category: string;
