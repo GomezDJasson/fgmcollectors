@@ -119,12 +119,20 @@ function SiteLayout() {
             <p className="text-sm text-white/40">
               Un universo para quienes disfrutan coleccionar.
             </p>
-            <Link
-              to="/politica-de-tratamiento-de-datos"
-              className="w-fit text-xs text-white/45 transition-colors hover:text-[#c4b5fd] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f6c945]"
-            >
-              Tratamiento de datos personales
-            </Link>
+            <div className="flex flex-col items-start gap-2">
+              <Link
+                to="/terminos-y-condiciones"
+                className="w-fit text-xs text-white/45 transition-colors hover:text-[#c4b5fd] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f6c945]"
+              >
+                Términos y condiciones de compra
+              </Link>
+              <Link
+                to="/politica-de-tratamiento-de-datos"
+                className="w-fit text-xs text-white/45 transition-colors hover:text-[#c4b5fd] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f6c945]"
+              >
+                Tratamiento de datos personales
+              </Link>
+            </div>
           </div>
           <div className="flex flex-col gap-3">
             <p className="text-sm font-semibold text-white/70">Síguenos en redes</p>
