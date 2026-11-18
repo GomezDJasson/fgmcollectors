@@ -1,26 +1,9 @@
 import { useMemo } from "react";
 import { ArrowRight, Sparkles } from "lucide-react";
 import ProductCard from "../components/ProductCard";
+import { Link } from "react-router-dom";
 import { useCatalog } from "../context/CatalogContext";
 import nerdBot from "../../nerdbot.png";
-
-const categories = [
-  {
-    number: "01",
-    title: "Figuras de colección",
-    description: "Personajes que merecen un lugar especial en tu colección.",
-  },
-  {
-    number: "02",
-    title: "Funko Pop",
-    description: "Tus universos y personajes favoritos en formato coleccionable.",
-  },
-  {
-    number: "03",
-    title: "Accesorios y más",
-    description: "Detalles y artículos para quienes viven la cultura geek.",
-  },
-];
 
 function Home() {
   const { catalog, loading, error } = useCatalog();
@@ -40,6 +23,21 @@ function Home() {
         .slice(0, 4),
     [catalog?.products]
   );
+
+  const categories = useMemo(() => {
+    const counts = new Map<string, number>();
+
+    (catalog?.products ?? []).forEach((product) => {
+      const category = product.category.trim();
+      if (category) {
+        counts.set(category, (counts.get(category) ?? 0) + 1);
+      }
+    });
+
+    return Array.from(counts, ([name, count]) => ({ name, count })).sort(
+      (a, b) => a.name.localeCompare(b.name, "es", { sensitivity: "base" })
+    );
+  }, [catalog?.products]);
 
   return (
     <main>
@@ -225,26 +223,52 @@ function Home() {
               </p>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-3">
-              {categories.map((category) => (
-                <article
-                  key={category.number}
-                  className="group rounded-2xl border border-white/10 bg-[#171222] p-7 transition-all duration-300 hover:-translate-y-1 hover:border-[#a78bfa]/45 hover:bg-[#1d172b]"
-                >
-                  <span className="text-xs font-bold tracking-widest text-[#f6c945]">
-                    {category.number}
-                  </span>
-                  <h3 className="mt-8 text-xl font-bold">{category.title}</h3>
-                  <p className="mt-3 min-h-[52px] text-sm leading-6 text-white/50">
-                    {category.description}
-                  </p>
-                  <span className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[#c4b5fd]">
-                    Próximamente
-                    <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-                  </span>
-                </article>
-              ))}
-            </div>
+            {error ? (
+              <div className="rounded-3xl border border-red-400/20 bg-[#171222] px-6 py-12 text-center">
+                <h3 className="text-xl font-bold">No pudimos cargar las categorías</h3>
+                <p className="mt-2 text-sm text-white/50">
+                  Estamos teniendo dificultades para conectar con nuestro catálogo.
+                </p>
+              </div>
+            ) : loading ? (
+              <div className="rounded-3xl border border-white/10 bg-[#171222] px-6 py-12 text-center">
+                <p className="text-sm text-white/50">Cargando categorías...</p>
+              </div>
+            ) : categories.length === 0 ? (
+              <div className="rounded-3xl border border-dashed border-[#a78bfa]/30 bg-[#171222]/70 px-6 py-12 text-center">
+                <h3 className="text-xl font-bold">Pronto tendremos colecciones</h3>
+                <p className="mt-2 text-sm text-white/50">
+                  Estamos preparando las categorías de nuestro catálogo.
+                </p>
+              </div>
+            ) : (
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {categories.map((category, index) => (
+                  <Link
+                    key={category.name}
+                    to={`/tienda?categoria=${encodeURIComponent(category.name)}`}
+                    className="group rounded-2xl border border-white/10 bg-[#171222] p-7 transition-all duration-300 hover:-translate-y-1 hover:border-[#a78bfa]/45 hover:bg-[#1d172b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f6c945] focus-visible:ring-offset-2 focus-visible:ring-offset-[#100d18]"
+                  >
+                    <span className="text-xs font-bold tracking-widest text-[#f6c945]">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <h3 className="mt-8 text-xl font-bold">{category.name}</h3>
+                    <p className="mt-3 min-h-[52px] text-sm leading-6 text-white/50">
+                      Explora los productos de esta categoría y encuentra tu próxima pieza favorita.
+                    </p>
+                    <div className="mt-7 flex items-center justify-between gap-3">
+                      <span className="text-xs font-medium text-white/45">
+                        {category.count} {category.count === 1 ? "producto" : "productos"}
+                      </span>
+                      <span className="inline-flex items-center gap-2 text-sm font-semibold text-[#c4b5fd]">
+                        Explorar
+                        <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
