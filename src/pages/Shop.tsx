@@ -15,16 +15,11 @@ function Shop() {
 
   const products = catalog?.products ?? [];
 
-  const categories = useMemo(
-    () =>
-      [...new Set(products.map((product) => product.category.trim()).filter(Boolean))].sort(
-        (a, b) => a.localeCompare(b, "es", { sensitivity: "base" })
-      ),
-    [products]
-  );
+  const categories = catalog?.categories ?? [];
+  const categoryNames = categories.map((item) => item.name);
 
   const requestedCategory = searchParams.get("categoria") ?? "Todas";
-  const category = categories.includes(requestedCategory) ? requestedCategory : "Todas";
+  const category = categoryNames.includes(requestedCategory) ? requestedCategory : "Todas";
 
   const updateCategory = (value: string) => {
     const nextParams = new URLSearchParams(searchParams);
@@ -129,7 +124,7 @@ function Shop() {
                 className="w-full rounded-xl border border-white/10 bg-[#100d18] px-3 py-3 text-sm text-white outline-none focus:border-[#a78bfa]"
               >
                 <option value="Todas">Todas las categorías</option>
-                {categories.map((item) => <option key={item} value={item}>{item}</option>)}
+                {categoryNames.map((item) => <option key={item} value={item}>{item}</option>)}
               </select>
             </label>
 
@@ -175,12 +170,14 @@ function Shop() {
           <div className="rounded-3xl border border-dashed border-[#a78bfa]/30 bg-[#171222]/70 px-6 py-14 text-center">
             <SlidersHorizontal size={28} className="mx-auto text-[#a78bfa]" />
             <h3 className="mt-4 text-xl font-bold">
-              {products.length === 0 ? "Pronto tendremos productos disponibles" : "No encontramos productos"}
+              {category !== "Todas" ? `Aún no hay productos en ${category}` : products.length === 0 ? "Pronto tendremos productos disponibles" : "No encontramos productos"}
             </h3>
             <p className="mt-2 text-sm text-white/50">
-              {products.length === 0
-                ? "Estamos preparando el catálogo. Vuelve pronto para descubrir nuestras piezas."
-                : "Prueba con otros términos de búsqueda o modifica los filtros."}
+              {category !== "Todas"
+                ? "Estamos preparando esta colección. Explora otras categorías mientras tanto."
+                : products.length === 0
+                  ? "Estamos preparando el catálogo. Vuelve pronto para descubrir nuestras piezas."
+                  : "Prueba con otros términos de búsqueda o modifica los filtros."}
             </p>
             {hasActiveFilters && (
               <button
