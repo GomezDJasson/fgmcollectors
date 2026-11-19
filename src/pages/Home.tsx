@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, ImageOff, Sparkles } from "lucide-react";
 import ProductCard from "../components/ProductCard";
 import { Link } from "react-router-dom";
 import { useCatalog } from "../context/CatalogContext";
@@ -24,20 +24,7 @@ function Home() {
     [catalog?.products]
   );
 
-  const categories = useMemo(() => {
-    const counts = new Map<string, number>();
-
-    (catalog?.products ?? []).forEach((product) => {
-      const category = product.category.trim();
-      if (category) {
-        counts.set(category, (counts.get(category) ?? 0) + 1);
-      }
-    });
-
-    return Array.from(counts, ([name, count]) => ({ name, count })).sort(
-      (a, b) => a.name.localeCompare(b.name, "es", { sensitivity: "base" })
-    );
-  }, [catalog?.products]);
+  const categories = catalog?.categories ?? [];
 
   return (
     <main>
@@ -242,29 +229,30 @@ function Home() {
                 </p>
               </div>
             ) : (
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {categories.map((category, index) => (
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                {categories.map((category) => (
                   <Link
                     key={category.name}
                     to={`/tienda?categoria=${encodeURIComponent(category.name)}`}
-                    className="group rounded-2xl border border-white/10 bg-[#171222] p-7 transition-all duration-300 hover:-translate-y-1 hover:border-[#a78bfa]/45 hover:bg-[#1d172b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f6c945] focus-visible:ring-offset-2 focus-visible:ring-offset-[#100d18]"
+                    className="group overflow-hidden rounded-2xl border border-white/10 bg-[#171222] transition-all duration-300 hover:-translate-y-1 hover:border-[#a78bfa]/45 hover:bg-[#1d172b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f6c945] focus-visible:ring-offset-2 focus-visible:ring-offset-[#100d18]"
                   >
-                    <span className="text-xs font-bold tracking-widest text-[#f6c945]">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <h3 className="mt-8 text-xl font-bold">{category.name}</h3>
-                    <p className="mt-3 min-h-[52px] text-sm leading-6 text-white/50">
-                      Explora los productos de esta categoría y encuentra tu próxima pieza favorita.
-                    </p>
-                    <div className="mt-7 flex items-center justify-between gap-3">
-                      <span className="text-xs font-medium text-white/45">
-                        {category.count} {category.count === 1 ? "producto" : "productos"}
-                      </span>
-                      <span className="inline-flex items-center gap-2 text-sm font-semibold text-[#c4b5fd]">
-                        Explorar
-                        <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-                      </span>
+                    <div className="relative aspect-[4/3] overflow-hidden bg-[#211a30]">
+                      {category.imageUrl ? (
+                        <img
+                          src={category.imageUrl}
+                          alt={category.name}
+                          loading="lazy"
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-[#a78bfa]/60">
+                          <ImageOff size={32} strokeWidth={1.5} aria-hidden="true" />
+                        </div>
+                      )}
                     </div>
+                    <h3 className="px-3 py-4 text-center text-base font-bold text-white transition-colors group-hover:text-[#c4b5fd] sm:text-lg">
+                      {category.name}
+                    </h3>
                   </Link>
                 ))}
               </div>
