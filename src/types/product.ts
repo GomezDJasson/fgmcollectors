@@ -21,9 +21,16 @@ export interface Product {
   availability: "Disponible" | "Agotado";
 }
 
+export interface CatalogCategory {
+  name: string;
+  order: number;
+  imageUrl: string;
+}
+
 export interface CatalogResponse {
   success: boolean;
   generatedAt: string;
   products: Product[];
   featured: Product[];
+  categories: CatalogCategory[];
 }
