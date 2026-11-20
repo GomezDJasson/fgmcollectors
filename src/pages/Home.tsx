@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, ChevronLeft, ChevronRight, ImageOff, Sparkles } from "lucide-react";
-import ProductCard from "../components/ProductCard";
+import MobileProductCarousel from "../components/MobileProductCarousel";
 import { Link } from "react-router-dom";
 import { useCatalog } from "../context/CatalogContext";
 import nerdBot from "../../nerdbot.png";
@@ -268,11 +268,11 @@ function Home() {
                 </p>
               </div>
             ) : (
-              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {newestProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
+              <MobileProductCarousel
+                products={newestProducts}
+                label="Novedades"
+                gridClassName="gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+              />
             )}
           </div>
         </section>
@@ -322,11 +322,11 @@ function Home() {
                 </p>
               </div>
             ) : (
-              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {catalog?.featured.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
+              <MobileProductCarousel
+                products={catalog?.featured ?? []}
+                label="Productos destacados"
+                gridClassName="gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+              />
             )}
           </div>
         </section>
