@@ -90,17 +90,20 @@ function ProductCard({ product }: ProductCardProps) {
         </div>
       </Link>
 
-      <div className="px-5 pb-5 pt-3">
+      <div className="px-3 pb-4 pt-2 sm:px-5 sm:pb-5 sm:pt-3">
         <button
           type="button"
           onClick={handleAddToCart}
           disabled={!isAvailable}
-          className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-[#f6c945] px-4 py-2.5 text-sm font-extrabold text-[#211807] transition-all hover:-translate-y-0.5 hover:bg-[#ffda68] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#f6c945] disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-white/35 disabled:hover:translate-y-0"
+          aria-label={isAvailable ? `Agregar ${product.name} al carrito` : `${product.name}: agotado`}
+          className="inline-flex min-h-9 w-full items-center justify-center gap-1.5 rounded-full bg-[#f6c945] px-2 py-2 text-xs font-extrabold text-[#211807] transition-all hover:-translate-y-0.5 hover:bg-[#ffda68] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#f6c945] disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-white/35 disabled:hover:translate-y-0 sm:min-h-11 sm:gap-2 sm:px-4 sm:py-2.5 sm:text-sm"
         >
           {isAvailable ? (
             <>
-              <ShoppingCart size={17} />
-              Agregar al carrito
+              <ShoppingCart size={15} className="shrink-0 sm:hidden" />
+              <ShoppingCart size={17} className="hidden shrink-0 sm:block" />
+              <span className="sm:hidden">Agregar</span>
+              <span className="hidden sm:inline">Agregar al carrito</span>
             </>
           ) : (
             "Agotado"
