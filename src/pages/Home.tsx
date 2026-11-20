@@ -1,5 +1,5 @@
-import { useMemo } from "react";
-import { ArrowRight, ImageOff, Sparkles } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { ArrowRight, ChevronLeft, ChevronRight, ImageOff, Sparkles } from "lucide-react";
 import ProductCard from "../components/ProductCard";
 import { Link } from "react-router-dom";
 import { useCatalog } from "../context/CatalogContext";
@@ -25,6 +25,47 @@ function Home() {
   );
 
   const categories = catalog?.categories ?? [];
+  const categoriesTrackRef = useRef<HTMLDivElement>(null);
+  const [canScrollCategoriesPrev, setCanScrollCategoriesPrev] = useState(false);
+  const [canScrollCategoriesNext, setCanScrollCategoriesNext] = useState(false);
+  const [hasCategoriesOverflow, setHasCategoriesOverflow] = useState(false);
+
+  const updateCategoriesControls = useCallback(() => {
+    const track = categoriesTrackRef.current;
+    if (!track) return;
+
+    setCanScrollCategoriesPrev(track.scrollLeft > 1);
+    setCanScrollCategoriesNext(
+      track.scrollLeft + track.clientWidth < track.scrollWidth - 1
+    );
+    setHasCategoriesOverflow(track.scrollWidth > track.clientWidth + 1);
+  }, []);
+
+  useEffect(() => {
+    const track = categoriesTrackRef.current;
+    if (!track) return;
+
+    updateCategoriesControls();
+    track.addEventListener("scroll", updateCategoriesControls, { passive: true });
+    window.addEventListener("resize", updateCategoriesControls);
+
+    return () => {
+      track.removeEventListener("scroll", updateCategoriesControls);
+      window.removeEventListener("resize", updateCategoriesControls);
+    };
+  }, [categories.length, updateCategoriesControls]);
+
+  const scrollCategories = (direction: -1 | 1) => {
+    const track = categoriesTrackRef.current;
+    const firstCard = track?.querySelector<HTMLElement>("[data-category-card]");
+    if (!track || !firstCard) return;
+
+    const gap = Number.parseFloat(window.getComputedStyle(track).columnGap) || 0;
+    track.scrollBy({
+      left: direction * (firstCard.getBoundingClientRect().width + gap),
+      behavior: "smooth",
+    });
+  };
 
   return (
     <main>
@@ -95,6 +136,103 @@ function Home() {
                 <p className="mt-1 text-xs text-white/65">Tu espacio coleccionista</p>
               </div>
             </div>
+          </div>
+        </section>
+
+        <section id="colecciones" className="scroll-mt-20 border-y border-white/10 bg-white/[0.025]">
+          <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8">
+            <div className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+              <div>
+                <p className="text-xs font-bold tracking-[0.22em] text-[#a78bfa]">
+                  EXPLORA NUESTRO UNIVERSO
+                </p>
+                <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
+                  Encuentra tu colección
+                </h2>
+              </div>
+              <div className="flex items-end justify-between gap-4 sm:justify-end">
+                <p className="max-w-md text-sm leading-7 text-white/50 sm:text-right">
+                  Un catálogo pensado para descubrir nuevas piezas y encontrar
+                  esos personajes que siempre has querido tener.
+                </p>
+                {hasCategoriesOverflow && (
+                  <div className="flex shrink-0 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => scrollCategories(-1)}
+                      disabled={!canScrollCategoriesPrev}
+                      aria-label="Ver categorías anteriores"
+                      className="flex size-10 items-center justify-center rounded-full border border-white/15 bg-[#171222] text-white transition-colors hover:border-[#a78bfa]/50 hover:bg-[#6f3abe] disabled:cursor-not-allowed disabled:opacity-30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6c945]"
+                    >
+                      <ChevronLeft size={20} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => scrollCategories(1)}
+                      disabled={!canScrollCategoriesNext}
+                      aria-label="Ver más categorías"
+                      className="flex size-10 items-center justify-center rounded-full border border-white/15 bg-[#171222] text-white transition-colors hover:border-[#a78bfa]/50 hover:bg-[#6f3abe] disabled:cursor-not-allowed disabled:opacity-30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6c945]"
+                    >
+                      <ChevronRight size={20} />
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {error ? (
+              <div className="rounded-3xl border border-red-400/20 bg-[#171222] px-6 py-12 text-center">
+                <h3 className="text-xl font-bold">No pudimos cargar las categorías</h3>
+                <p className="mt-2 text-sm text-white/50">
+                  Estamos teniendo dificultades para conectar con nuestro catálogo.
+                </p>
+              </div>
+            ) : loading ? (
+              <div className="rounded-3xl border border-white/10 bg-[#171222] px-6 py-12 text-center">
+                <p className="text-sm text-white/50">Cargando categorías...</p>
+              </div>
+            ) : categories.length === 0 ? (
+              <div className="rounded-3xl border border-dashed border-[#a78bfa]/30 bg-[#171222]/70 px-6 py-12 text-center">
+                <h3 className="text-xl font-bold">Pronto tendremos colecciones</h3>
+                <p className="mt-2 text-sm text-white/50">
+                  Estamos preparando las categorías de nuestro catálogo.
+                </p>
+              </div>
+            ) : (
+              <div
+                ref={categoriesTrackRef}
+                onScroll={updateCategoriesControls}
+                aria-label="Categorías disponibles"
+                className="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              >
+                {categories.map((category) => (
+                  <Link
+                    key={category.name}
+                    data-category-card
+                    to={`/tienda?categoria=${encodeURIComponent(category.name)}`}
+                    className="group w-[calc((100%-2rem)/3)] shrink-0 snap-start overflow-hidden rounded-2xl border border-white/10 bg-[#171222] transition-all duration-300 hover:-translate-y-1 hover:border-[#a78bfa]/45 hover:bg-[#1d172b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f6c945] focus-visible:ring-offset-2 focus-visible:ring-offset-[#100d18] lg:w-[calc((100%-3rem)/4)]"
+                  >
+                    <div className="relative aspect-[4/3] overflow-hidden bg-[#211a30]">
+                      {category.imageUrl ? (
+                        <img
+                          src={category.imageUrl}
+                          alt={category.name}
+                          loading="lazy"
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-[#a78bfa]/60">
+                          <ImageOff size={32} strokeWidth={1.5} aria-hidden="true" />
+                        </div>
+                      )}
+                    </div>
+                    <h3 className="px-3 py-4 text-center text-base font-bold text-white transition-colors group-hover:text-[#c4b5fd] sm:text-lg">
+                      {category.name}
+                    </h3>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
@@ -187,73 +325,6 @@ function Home() {
               <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {catalog?.featured.map((product) => (
                   <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
-            )}
-          </div>
-        </section>
-
-        <section id="colecciones" className="scroll-mt-20 border-y border-white/10 bg-white/[0.025]">
-          <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8">
-            <div className="mb-10 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
-              <div>
-                <p className="text-xs font-bold tracking-[0.22em] text-[#a78bfa]">
-                  EXPLORA NUESTRO UNIVERSO
-                </p>
-                <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
-                  Encuentra tu colección
-                </h2>
-              </div>
-              <p className="max-w-md text-sm leading-7 text-white/50">
-                Un catálogo pensado para descubrir nuevas piezas y encontrar
-                esos personajes que siempre has querido tener.
-              </p>
-            </div>
-
-            {error ? (
-              <div className="rounded-3xl border border-red-400/20 bg-[#171222] px-6 py-12 text-center">
-                <h3 className="text-xl font-bold">No pudimos cargar las categorías</h3>
-                <p className="mt-2 text-sm text-white/50">
-                  Estamos teniendo dificultades para conectar con nuestro catálogo.
-                </p>
-              </div>
-            ) : loading ? (
-              <div className="rounded-3xl border border-white/10 bg-[#171222] px-6 py-12 text-center">
-                <p className="text-sm text-white/50">Cargando categorías...</p>
-              </div>
-            ) : categories.length === 0 ? (
-              <div className="rounded-3xl border border-dashed border-[#a78bfa]/30 bg-[#171222]/70 px-6 py-12 text-center">
-                <h3 className="text-xl font-bold">Pronto tendremos colecciones</h3>
-                <p className="mt-2 text-sm text-white/50">
-                  Estamos preparando las categorías de nuestro catálogo.
-                </p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-                {categories.map((category) => (
-                  <Link
-                    key={category.name}
-                    to={`/tienda?categoria=${encodeURIComponent(category.name)}`}
-                    className="group overflow-hidden rounded-2xl border border-white/10 bg-[#171222] transition-all duration-300 hover:-translate-y-1 hover:border-[#a78bfa]/45 hover:bg-[#1d172b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f6c945] focus-visible:ring-offset-2 focus-visible:ring-offset-[#100d18]"
-                  >
-                    <div className="relative aspect-[4/3] overflow-hidden bg-[#211a30]">
-                      {category.imageUrl ? (
-                        <img
-                          src={category.imageUrl}
-                          alt={category.name}
-                          loading="lazy"
-                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center text-[#a78bfa]/60">
-                          <ImageOff size={32} strokeWidth={1.5} aria-hidden="true" />
-                        </div>
-                      )}
-                    </div>
-                    <h3 className="px-3 py-4 text-center text-base font-bold text-white transition-colors group-hover:text-[#c4b5fd] sm:text-lg">
-                      {category.name}
-                    </h3>
-                  </Link>
                 ))}
               </div>
             )}
