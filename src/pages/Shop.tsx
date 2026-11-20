@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import ProductCard from "../components/ProductCard";
@@ -6,12 +6,15 @@ import { useCatalog } from "../context/CatalogContext";
 
 type AvailabilityFilter = "Todos" | "Disponible" | "Agotado";
 
+const PAGE_SIZE = 12;
+
 function Shop() {
   const { catalog, loading, error } = useCatalog();
   const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState("");
   const [brand, setBrand] = useState("Todas");
   const [availability, setAvailability] = useState<AvailabilityFilter>("Todos");
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   const products = catalog?.products ?? [];
 
@@ -30,6 +33,7 @@ function Shop() {
     }
     setSearchParams(nextParams);
   };
+
   const brands = useMemo(
     () => [...new Set(products.map((product) => product.brand).filter(Boolean))].sort(),
     [products]
@@ -51,6 +55,13 @@ function Shop() {
       return matchesSearch && matchesCategory && matchesBrand && matchesAvailability;
     });
   }, [products, search, category, brand, availability]);
+
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [search, category, brand, availability]);
+
+  const visibleProducts = filteredProducts.slice(0, visibleCount);
+  const hasMoreProducts = visibleCount < filteredProducts.length;
 
   const hasActiveFilters =
     search !== "" || category !== "Todas" || brand !== "Todas" || availability !== "Todos";
@@ -190,11 +201,28 @@ function Shop() {
             )}
           </div>
         ) : (
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
+              {visibleProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+
+            {hasMoreProducts && (
+              <div className="mt-10 flex flex-col items-center gap-3">
+                <p className="text-xs text-white/40">
+                  Mostrando {visibleProducts.length} de {filteredProducts.length} productos
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setVisibleCount((current) => current + PAGE_SIZE)}
+                  className="min-h-11 rounded-full border border-[#a78bfa]/40 bg-[#a78bfa]/10 px-7 py-3 text-sm font-bold text-[#ddd0ff] transition-colors hover:border-[#a78bfa] hover:bg-[#a78bfa]/20 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#f6c945]"
+                >
+                  Ver más productos
+                </button>
+              </div>
+            )}
+          </>
         )}
       </section>
     </main>
