@@ -1,5 +1,38 @@
-# fgm
-Mi nombre es Jasson D. Gomez uno de los creadores de FGM Colector's.
-Desde hace un tiempo e estado estudiando programación web con el objetivo principal de crear una pagina web totalmente funcional para nuestra tienda virtual.
-Lo que aquí encontraras es lo que e venido poniendo en práctica de lo que e estudiado.
-No es una página totalmente profesional pero la e empezado desde cero, cada vez que aprenda algo nuevo y vea que lo puedo implementar lo haré para así mejorar cada vez más la experencia para el usuario.
+# Nerdybles
+
+Tienda online de artículos coleccionables. Este repositorio contiene la reconstrucción del frontend con React, TypeScript, Vite y Tailwind CSS.
+
+## Estado del proyecto
+
+Actualmente se está preparando la nueva aplicación. La versión original en HTML, CSS y JavaScript se conserva en la rama `main`; el rediseño se desarrolla en `redesign/react`.
+
+## Tecnologías
+
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- React Router
+- Lucide React
+
+## Requisitos
+
+- Node.js en una versión LTS compatible con la versión instalada de Vite.
+- npm
+
+## Instalación
+
+```bash
+npm install
+npm run dev
+```
+
+## Scripts
+
+- `npm run dev`: servidor de desarrollo.
+- `npm run build`: comprobación de TypeScript y build de producción.
+- `npm run preview`: vista previa del build.
+
+## Alcance inicial
+
+Frontend de catálogo y solicitud de pedidos por WhatsApp. No incluye pagos en línea, autenticación ni administración de inventario.
